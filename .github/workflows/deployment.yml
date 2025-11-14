@@ -17,6 +17,7 @@ jobs:
           port: 22
           script: |
             sudo mkdir -p /opt/applications/app-map/${{ env.IMAGE }}
+            sudo chown -R $USER:$USER /opt/applications/app-map/${{ env.IMAGE }}
             ls -al /opt/applications/app-map
   
   run-container: 
@@ -33,7 +34,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.PRIVATE_KEY }}
           port: 22
-          source: "compose.yml"
+          source: "compose.yml,api.conf,web.conf"
           target: /opt/applications/app-map/${{env.IMAGE}}
       - name: execute commands to run container
         uses: appleboy/ssh-action@v1.2.3
@@ -43,4 +44,4 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           port: 22
           script: |
-            sudo docker compose -f /opt/applications/app-map/${{env.IMAGE}}/compose.yml up -d
+            docker compose -f /opt/applications/app-map/${{env.IMAGE}}/compose.yml up -d
