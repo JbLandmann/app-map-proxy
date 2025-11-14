@@ -16,7 +16,7 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           port: 22
           script: |
-            mkdir /opt/applications/app-map/${{ env.IMAGE }}
+            sudo mkdir -p /opt/applications/app-map/${{ env.IMAGE }}
             ls -al /opt/applications/app-map
   
   run-container: 
@@ -43,4 +43,4 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           port: 22
           script: |
-            docker compose -f /opt/applications/app-map/${{env.IMAGE}}/compose.yml up -d
+            sudo docker compose -f /opt/applications/app-map/${{env.IMAGE}}/compose.yml up -d
