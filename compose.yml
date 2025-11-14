@@ -6,8 +6,8 @@ services:
     ports: 
       - 80:80
     volumes:
-      - ./api.conf:/etc/nginx/conf.d/api.conf
-      #- ./web.conf:/etc/nginx/conf.d/web.conf
+      - ./web.conf:/etc/nginx/conf.d/web.conf
+      #- ./api.conf:/etc/nginx/conf.d/api.conf
     networks:
     - app-map-network
 
