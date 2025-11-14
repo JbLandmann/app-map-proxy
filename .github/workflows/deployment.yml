@@ -44,4 +44,5 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           port: 22
           script: |
+            sudo docker network create app-map-network || true
             sudo docker compose -f /opt/applications/app-map/${{env.IMAGE}}/compose.yml up -d
