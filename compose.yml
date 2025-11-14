@@ -1,0 +1,18 @@
+services:
+  proxy:
+    image: nginx:1.23.3-alpine
+    container_name: app-map-proxy
+    restart: always
+    ports: 
+      - 80:80
+    volumes:
+      - ./api.conf:/etc/nginx/conf.d/api.conf
+      #- ./web.conf:/etc/nginx/conf.d/web.conf
+    networks:
+    - app-map-network
+
+networks:
+  app-map-network:
+    external: true
+    name: app-map-network
+
