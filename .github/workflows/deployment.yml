@@ -45,4 +45,7 @@ jobs:
           port: 22
           script: |
             docker network create app-map-network || true
+            docker compose -f /opt/applications/app-map/${{env.IMAGE}}/compose.yml down
+            docker compose -f /opt/applications/app-map/${{env.IMAGE}}/compose.yml pull
             docker compose -f /opt/applications/app-map/${{env.IMAGE}}/compose.yml up -d
+            docker image prune -f
