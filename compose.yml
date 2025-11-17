@@ -4,10 +4,13 @@ services:
     container_name: app-map-proxy
     restart: always
     ports: 
-      - 80:80
+      - 80:80      
+      - 443:443    
     volumes:
       - ./web.conf:/etc/nginx/conf.d/web.conf
-      #- ./api.conf:/etc/nginx/conf.d/api.conf
+      # Volumes pour les certificats SSL Let's Encrypt
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
     networks:
     - app-map-network
 
