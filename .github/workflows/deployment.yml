@@ -16,8 +16,8 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           port: 22
           script: |
-            sudo mkdir -p /opt/applications/app-map/${{ env.IMAGE }}
-            sudo chown -R $USER:$USER /opt/applications/app-map/${{ env.IMAGE }}
+            mkdir -p /opt/applications/app-map/${{ env.IMAGE }}
+            chown -R $USER:$USER /opt/applications/app-map/${{ env.IMAGE }}
             ls -al /opt/applications/app-map
   
   run-container: 
