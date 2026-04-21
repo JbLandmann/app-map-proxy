@@ -49,6 +49,9 @@ jobs:
             docker network create app-map-network || true
             cd /opt/applications/app-map/${{ env.IMAGE }}
             test -f /etc/app-map/back.env || { echo "❌ Missing /etc/app-map/back.env"; exit 1; }
+            test -f /etc/letsencrypt/live/vps-954b32b8.vps.ovh.net/fullchain.pem || { echo "❌ Missing LetsEncrypt certificate on VPS"; exit 1; }
+            test -f /etc/letsencrypt/live/vps-954b32b8.vps.ovh.net/privkey.pem || { echo "❌ Missing LetsEncrypt private key on VPS"; exit 1; }
+            mkdir -p /var/www/certbot
             docker compose --env-file /etc/app-map/back.env -f compose.yml down
             docker compose --env-file /etc/app-map/back.env -f compose.yml pull
             docker compose --env-file /etc/app-map/back.env -f compose.yml up -d

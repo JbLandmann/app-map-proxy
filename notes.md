@@ -5,22 +5,24 @@
 # Installer Certbot
 sudo apt update
 sudo apt install certbot
+sudo mkdir -p /var/www/certbot
 
 # Obtenir le certificat
 sudo certbot certonly --webroot \
-  -w /chemin/vers/proxy/certbot/www \
-  -d dns_du_serveur \
+  -w /var/www/certbot \
+  -d vps-954b32b8.vps.ovh.net \
   --email votre@email.com \
   --agree-tos \
   --no-eff-email
 ```
 
-2. Copier les certificats
+2. Le proxy monte directement les certificats du VPS
 
 ```
-# Copier les certificats vers le dossier Nginx
-sudo cp -r /etc/letsencrypt/* /chemin/vers/proxy/certbot/conf/
-sudo chown -R $(whoami):$(whoami) /chemin/vers/proxy/certbot/conf
+# Les certificats restent dans /etc/letsencrypt sur le VPS
+# Le proxy monte /etc/letsencrypt et /var/www/certbot en lecture seule
+sudo test -f /etc/letsencrypt/live/vps-954b32b8.vps.ovh.net/fullchain.pem
+sudo test -f /etc/letsencrypt/live/vps-954b32b8.vps.ovh.net/privkey.pem
 ```
 
 3. Recharger le container puis tester 
@@ -35,7 +37,7 @@ sudo crontab -e
 ```
 puis le configurer ( le mieux 1x par jour)
 ```
-0 3 * * * certbot renew --webroot -w /chemin/vers/proxy/certbot/www && docker exec app-map-proxy nginx -s reload
+0 3 * * * certbot renew --webroot -w /var/www/certbot && docker exec app-map-proxy nginx -s reload
 ```
 doc cronjob:
 ```
