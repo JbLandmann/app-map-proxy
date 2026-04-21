@@ -1,18 +1,25 @@
 services:
   proxy:
-    image: nginx:1.23.3-alpine
+    image: nginx:1.27-alpine
     container_name: app-map-proxy
     restart: always
+    environment:
+      REQUEST_API_KEY: ${REQUEST_API_KEY}
+      NGINX_ENVSUBST_FILTER: ^REQUEST_API_KEY$
     ports: 
       - 80:80      
       - 443:443    
     volumes:
-      - ./web.conf:/etc/nginx/conf.d/web.conf
-      # Volumes pour les certificats SSL Let's Encrypt
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
+      - ./web.conf:/etc/nginx/templates/default.conf.template:ro
+      - ./certbot/conf:/etc/letsencrypt:ro
+      - ./certbot/www:/var/www/certbot:ro
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:80/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
     networks:
-    - app-map-network
+      - app-map-network
 
 networks:
   app-map-network:

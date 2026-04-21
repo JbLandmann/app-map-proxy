@@ -49,4 +49,8 @@ doc cronjob:
 └────────── Minute (0-59)
 ```
 
+5. Secret API backend
+
+Le proxy relit `REQUEST_API_KEY` depuis `/etc/app-map/back.env` au demarrage et l'injecte vers le backend sur les requetes `/api`.
+
 
