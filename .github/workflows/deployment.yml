@@ -46,12 +46,12 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           port: ${{ secrets.PORT || 22 }}
           script: |
-            docker network create app-map-network || true
+            docker network inspect app-map-network >/dev/null 2>&1 || docker network create app-map-network >/dev/null
             cd /opt/applications/app-map/${{ env.IMAGE }}
             test -f /etc/app-map/back.env || { echo "❌ Missing /etc/app-map/back.env"; exit 1; }
-            test -f /etc/letsencrypt/live/vps-954b32b8.vps.ovh.net/fullchain.pem || { echo "❌ Missing LetsEncrypt certificate on VPS"; exit 1; }
-            test -f /etc/letsencrypt/live/vps-954b32b8.vps.ovh.net/privkey.pem || { echo "❌ Missing LetsEncrypt private key on VPS"; exit 1; }
             mkdir -p /var/www/certbot
+            docker run --rm -v /etc/letsencrypt:/etc/letsencrypt:ro alpine:3.21 sh -c "test -f /etc/letsencrypt/live/vps-954b32b8.vps.ovh.net/fullchain.pem" || { echo "❌ Missing LetsEncrypt certificate in Docker mount"; exit 1; }
+            docker run --rm -v /etc/letsencrypt:/etc/letsencrypt:ro alpine:3.21 sh -c "test -f /etc/letsencrypt/live/vps-954b32b8.vps.ovh.net/privkey.pem" || { echo "❌ Missing LetsEncrypt private key in Docker mount"; exit 1; }
             docker compose --env-file /etc/app-map/back.env -f compose.yml down
             docker compose --env-file /etc/app-map/back.env -f compose.yml pull
             docker compose --env-file /etc/app-map/back.env -f compose.yml up -d
