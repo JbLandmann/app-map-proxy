@@ -3,11 +3,14 @@ services:
     image: nginx:1.27-alpine
     container_name: app-map-proxy
     restart: always
+    environment:
+      REQUEST_API_KEY: ${REQUEST_API_KEY}
+      NGINX_ENVSUBST_FILTER: ^REQUEST_API_KEY$
     ports: 
       - 80:80      
       - 443:443    
     volumes:
-      - ./web.conf:/etc/nginx/conf.d/web.conf:ro
+      - ./web.conf:/etc/nginx/templates/default.conf.template:ro
       - ./certbot/conf:/etc/letsencrypt:ro
       - ./certbot/www:/var/www/certbot:ro
     healthcheck:
