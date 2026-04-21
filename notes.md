@@ -52,5 +52,6 @@ doc cronjob:
 5. Secret API backend
 
 Le proxy relit `REQUEST_API_KEY` depuis `/etc/app-map/back.env` au demarrage et l'injecte vers le backend sur les requetes `/api`.
+Le front doit viser `https://vps-954b32b8.vps.ovh.net/api/v1` ; le proxy retire `/api/` avant de transmettre au back qui expose `/v1/*`.
 
 
